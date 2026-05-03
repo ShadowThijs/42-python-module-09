@@ -1,0 +1,8 @@
+*.tar
+*.pdf
+data_exporter.py
+data_generator.py
+.omc
+mypy*
+**/__pycache__
+venv

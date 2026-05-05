@@ -119,7 +119,7 @@ def main() -> None:
 
     print()
     print("=" * 41)
-    print("Expected validation error:")
+    print("Expected validation error (no Commander/Captain):")
     try:
         SpaceMission(
             mission_id="M_FAIL",
@@ -138,6 +138,68 @@ def main() -> None:
                 ),
             ],
             budget_millions=100.0,
+        )
+    except ValidationError as e:
+        msg = e.errors()[0]["msg"]
+        print(msg.replace("Value error, ", ""))
+
+    print()
+    print("=" * 41)
+    print("Expected validation error (inactive crew member):")
+    try:
+        SpaceMission(
+            mission_id="M2024_BAD",
+            mission_name="Ghost Ship",
+            destination="Europa",
+            launch_date=datetime(2024, 6, 1),
+            duration_days=100,
+            crew=[
+                CrewMember(
+                    member_id="CMD002",
+                    name="Active Commander",
+                    rank=Rank.commander,
+                    age=40,
+                    specialization="Command",
+                    years_experience=15,
+                    is_active=True,
+                ),
+                CrewMember(
+                    member_id="CPT002",
+                    name="Retired Captain",
+                    rank=Rank.captain,
+                    age=60,
+                    specialization="Navigation",
+                    years_experience=30,
+                    is_active=False,
+                ),
+            ],
+            budget_millions=500.0,
+        )
+    except ValidationError as e:
+        msg = e.errors()[0]["msg"]
+        print(msg.replace("Value error, ", ""))
+
+    print()
+    print("=" * 41)
+    print("Expected validation error (budget over limit):")
+    try:
+        SpaceMission(
+            mission_id="M2024_EXP",
+            mission_name="Expensive Mission",
+            destination="Titan",
+            launch_date=datetime(2024, 6, 1),
+            duration_days=100,
+            crew=[
+                CrewMember(
+                    member_id="CMD003",
+                    name="Big Spender",
+                    rank=Rank.commander,
+                    age=45,
+                    specialization="Finance",
+                    years_experience=20,
+                ),
+            ],
+            budget_millions=15000.0,
         )
     except ValidationError as e:
         msg = e.errors()[0]["msg"]
